@@ -7,6 +7,8 @@ import com.yammer.dropwizard.db.DatabaseConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class WhatsYourMoodConfiguration extends Configuration {
     @Valid
@@ -23,7 +25,13 @@ public class WhatsYourMoodConfiguration extends Configuration {
         return twilio;
     }
 
-    public DatabaseConfiguration getDatabaseConfiguration() {
+    public DatabaseConfiguration getDatabaseConfiguration() throws URISyntaxException{
+        URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+        database.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + "/" + dbUri.getPath());
+        database.setUser(dbUri.getUserInfo().split(":")[0]);
+        database.setPassword(dbUri.getUserInfo().split(":")[1]);
+
         return database;
     }
 }

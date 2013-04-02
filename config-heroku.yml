@@ -16,7 +16,7 @@ database:
   password: HEROKU_POSTGRESQL_PASSWORD
 
   # the JDBC URL
-  url: jdbc:DATABASE_URL
+  url: HEROKU_POSTGRESQL_JDBC_URL
 
   # any properties specific to your JDBC driver:
   properties:
