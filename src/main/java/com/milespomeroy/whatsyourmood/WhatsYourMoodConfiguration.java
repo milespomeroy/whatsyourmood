@@ -28,7 +28,7 @@ public class WhatsYourMoodConfiguration extends Configuration {
     public DatabaseConfiguration getDatabaseConfiguration() throws URISyntaxException{
         URI dbUri = new URI(System.getenv("DATABASE_URL"));
 
-        database.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + "/" + dbUri.getPath());
+        database.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
         database.setUser(dbUri.getUserInfo().split(":")[0]);
         database.setPassword(dbUri.getUserInfo().split(":")[1]);
 
