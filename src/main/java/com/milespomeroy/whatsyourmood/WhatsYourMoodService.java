@@ -1,7 +1,8 @@
 package com.milespomeroy.whatsyourmood;
 
 import com.milespomeroy.whatsyourmood.health.ConfigHealthCheck;
-import com.milespomeroy.whatsyourmood.resources.HelpResource;
+import com.milespomeroy.whatsyourmood.jdbi.UserDAO;
+import com.milespomeroy.whatsyourmood.resources.SmsResource;
 import com.milespomeroy.whatsyourmood.resources.TestResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -25,7 +26,9 @@ public class WhatsYourMoodService extends Service<WhatsYourMoodConfiguration> {
         final DBI jdbi = factory.build(environment, configuration.getDatabaseConfiguration(), "postgresql");
 
         environment.addResource(new TestResource("pong"));
-        environment.addResource(new HelpResource());
+
+        final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+        environment.addResource(new SmsResource(userDAO));
 
         environment.addHealthCheck(new ConfigHealthCheck(configuration));
     }
