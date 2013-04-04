@@ -1,5 +1,6 @@
 package com.milespomeroy.whatsyourmood.resources;
 
+import com.milespomeroy.whatsyourmood.core.User;
 import com.milespomeroy.whatsyourmood.jdbi.UserDAO;
 import com.twilio.sdk.verbs.Sms;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -35,11 +36,12 @@ public class SmsResource {
         TwiMLResponse twiml = new TwiMLResponse();
         String message;
 
-        List<String> phones = userDAO.findAll();
-        if (phones.contains(fromPhone)) {
-            message = String.format(NAME_MESSAGE, body);
-        } else {
+        User user = userDAO.findUserByPhone(fromPhone);
+
+        if (user == null) {
             message = WELCOME_MESSAGE;
+        } else {
+            message = String.format(NAME_MESSAGE, body);
         }
 
         Sms sms = new Sms(message);
